@@ -2,7 +2,7 @@
 
 SmartThing SmartApps and Device Handlers for Insteon Switches and Dimmers.
 
-This solution allows a way for SmartThings send commands to the Insteon Hub and receive responses. You can control your Insteon switchwes and dimmers from within ST and use various automation solutions within ST.
+This solution allows a way for SmartThings hub send commands to the local Insteon Hub and receive responses. You can control your Insteon switches and dimmers from within ST and use various automation solutions within ST.
 
 In this solution the Insteon Hub settings and device mappings are done using the SmartThings app.
 
