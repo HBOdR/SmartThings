@@ -34,11 +34,13 @@ metadata {
 				attributeState "turningOn", label:'${name}', action:"switch.off", icon:"st.switches.switch.on", backgroundColor:"#79b821", nextState:"turningOff"
 				attributeState "turningOff", label:'${name}', action:"switch.on", icon:"st.switches.switch.off", backgroundColor:"#ffffff", nextState:"turningOn"
             }
-            
 			tileAttribute ("device.level", key: "SLIDER_CONTROL") {
 				attributeState "level", action:"switch level.setLevel"
-           }
-        }
+			}
+			tileAttribute ("brightnessLabel", key: "SECONDARY_CONTROL") {
+				attributeState "Brightness", label: '${name}', defaultState: true
+			}
+		}
         
 		standardTile("refresh", "device.switch", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
 			state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
@@ -70,7 +72,7 @@ def parse(String description) {
 
 def on() {
 	log.info "Turning $device.name (${device.deviceNetworkId}) ON"
-	parent.childOn(device.deviceNetworkId)
+    parent.childOn(device.deviceNetworkId)
 	sendEvent(name: "switch", value: "on");
 }
 
