@@ -44,36 +44,51 @@ metadata {
 			state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
         }
 
-        valueTile("level", "device.level", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-            state "level", label:'${currentValue} %', unit:"%", backgroundColor:"#ffffff"
-        }
-
         main(["switch"])
         details(["switch", "level", "refresh"])
     }
 }
 
+// Parse incoming device messages to generate events - doesn't seem to be working.
+def parse(String description) {
+    log.debug "parse description: $description"
+
+    def attrName = null
+    def attrValue = null
+
+    if (description?.startsWith("on/off:")) {
+        log.debug "switch command"
+        attrName = "switch"
+        attrValue = description?.endsWith("1") ? "on" : "off"
+    }
+
+    def result = createEvent(name: attrName, value: attrValue)
+
+    log.debug "Parse returned ${result?.descriptionText}"
+    return result
+}
+
 def on() {
-	log.debug "Turning device ON"
-    parent.childOn(device.deviceNetworkId)
+	log.info "Turning $device.name (${device.deviceNetworkId}) ON"
+	parent.childOn(device.deviceNetworkId)
 	sendEvent(name: "switch", value: "on");
 }
 
 def off() {
-	log.debug "Turning device OFF"
+	log.info "Turning $device.name (${device.deviceNetworkId}) OFF"
 	parent.childOff(device.deviceNetworkId)
 	sendEvent(name: "switch", value: "off");
 }
 
 def setLevel(level) {
-	log.debug "setLevel(${level})"
 	if (level > 0) {
+		parent.childDim(device.deviceNetworkId, level)
 		sendEvent(name: "switch", value: "on")
+		sendEvent(name: "level", value: level, unit: "%")
 	} else {
+		parent.childOff(device.deviceNetworkId)
 		sendEvent(name: "switch", value: "off")
 	}
-	sendEvent(name: "level", value: level, unit: "%")
-	parent.childDim(device.deviceNetworkId, level)
 }
 
 def ping() {
@@ -92,11 +107,11 @@ def refresh() {
 }
 
 def updatestatus(level) {
-    log.debug "updatestatus(${device.displayName}, ${level})"
-    if (level > 0) {
-        sendEvent(name: "switch", value: "on")
-    } else {
-        sendEvent(name: "switch", value: "off")
-    }
-    sendEvent(name: "level", value: level, unit: "%")
+	log.debug "updatestatus(${device.displayName}, ${level})"
+	if (level > 0) {
+		sendEvent(name: "switch", value: "on")
+		sendEvent(name: "level", value: level, unit: "%")
+	} else {
+		sendEvent(name: "switch", value: "off")
+	}
 }
