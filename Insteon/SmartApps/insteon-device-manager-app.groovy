@@ -14,16 +14,18 @@
  *
  */
 
+def clientVersion() { return "01.00" }
+
 definition (
-  name: "Insteon Device Manager",
-  namespace: "HBOdR",
-  author: "Hugo Bonilla",
-  description: "Used to install and manage Insteon devices. Currently work with switches only.",
-  category: "Convenience",
-  singleInstance: true,
-  iconUrl: "http://www.insteon.com.au/img/site/badge-large.png",
-  iconX2Url: "http://www.insteon.com.au/img/site/badge-large.png",
-  iconX3Url: "http://www.insteon.com.au/img/site/badge-large.png",
+	name: "Insteon Device Manager",
+	namespace: "HBOdR",
+	author: "Hugo Bonilla",
+	description: "Used to install and manage Insteon devices. Currently work with switches only.",
+    category: "Convenience",
+	singleInstance: true,
+    iconUrl: "http://www.insteon.com.au/img/site/badge-large.png",
+	iconX2Url: "http://www.insteon.com.au/img/site/badge-large.png",
+	iconX3Url: "http://www.insteon.com.au/img/site/badge-large.png",
 )
 
 preferences {
@@ -48,7 +50,7 @@ def pageMain() {
 		}
 
 		if (installed) {
-			section(title: "Insteon Switch") {
+			section("Insteon Switch") {
 				href "switchSettings", title: "Switches", description: "Tap here to add or manage Insteon Switches", 
 					image: "http://www.freeiconspng.com/uploads/light-switch-png-icon-1.png", required: false, page: "switchSettings"
 			}
@@ -75,5 +77,4 @@ def updated() {
 }
 
 def initialize() {
-	log.debug "There are ${childApps.size()} child smartapps"
 }
