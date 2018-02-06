@@ -45,13 +45,13 @@ metadata {
 }
 
 def on() {
-	log.debug "Turning device ON"
+	log.info "Turning $device.name (${device.deviceNetworkId}) ON"
     parent.childOn(device.deviceNetworkId)
 	sendEvent(name: "switch", value: "on");
 }
 
 def off() {
-	log.debug "Turning device OFF"
+	log.info "Turning $device.name (${device.deviceNetworkId}) OFF"
 	parent.childOff(device.deviceNetworkId)
 	sendEvent(name: "switch", value: "off");
 }
@@ -78,5 +78,4 @@ def updatestatus(level) {
     } else {
         sendEvent(name: "switch", value: "off")
     }
-//    sendEvent(name: "level", value: level, unit: "%")
 }
